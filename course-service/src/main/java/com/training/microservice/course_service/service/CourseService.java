@@ -15,20 +15,20 @@ public class CourseService {
 	@Autowired
 	private CourseRepository repository;
 	
-	public List<Course> alleKurse() {
+	public List<Course> allCourses() {
 		return repository.findAll();
 	}
 	
-	public Optional<Course> findeNachId(String kursId) {
-		return repository.findById(Long.valueOf(kursId));
+	public Optional<Course> findeById(String courseId) {
+		return repository.findById(Long.valueOf(courseId));
 	}
 	
-	public Course speichern(Course kurs) {
-		return repository.save(kurs);
+	public Course save(Course course) {
+		return repository.save(course);
 	}	
 	
-	public void loeschen(String kursId) {
-		repository.deleteById(Long.valueOf(kursId));
+	public void delete(String courseId) {
+		repository.deleteById(Long.valueOf(courseId));
 	}
 	
 	/*

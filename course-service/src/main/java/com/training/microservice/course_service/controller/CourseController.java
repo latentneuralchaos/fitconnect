@@ -22,26 +22,26 @@ import com.training.microservice.course_service.service.CourseService;
  * 	DELETE:	Löschen
  */
 @RestController
-@RequestMapping("/api/course")  				
+@RequestMapping("/api/course")  							
 public class CourseController {	
 	
 	@Autowired
-	private CourseService kursService;
+	private CourseService courseService;
 	
 	@GetMapping
-	public List<Course> alle() {				// http://localhost:8081/api/course
+	public List<Course> alle() {				// http://localhost:8082/api/course
 		
-		return kursService.alleKurse();
+		return courseService.allCourses();
 	}
 	
 	@GetMapping("/{courseId}")						// http://localhost:8081/api/course/1
-	public Optional <Course> findeNachId(@PathVariable String courseId) {
-		return kursService.findeNachId(courseId);
+	public Optional <Course> findById(@PathVariable String courseId) {
+		return courseService.findeById(courseId);
 	}
 	
 	@PostMapping
-	public Course erzeugen(@RequestBody Course kurs) {
-		return kursService.speichern(kurs);
+	public Course create(@RequestBody Course course) {
+		return courseService.save(course);
 	}
 	
 }
