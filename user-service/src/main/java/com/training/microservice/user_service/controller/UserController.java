@@ -23,7 +23,7 @@ import com.training.microservice.user_service.service.UserService;
  * 	DELETE:	Löschen
  */
 @RestController
-@RequestMapping("/api/benutzer")  				
+@RequestMapping("/api/user/")  				
 public class UserController {	
 	
 	@Autowired
@@ -40,14 +40,29 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody User user) {
+	public ResponseEntity<String> save(@RequestBody User user) {
 		
+		return checkAndCreateUser(user);
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<String> registerUser(@RequestBody User user) {
+		return checkAndCreateUser(user);		
+	}
+
+	private ResponseEntity<String> checkAndCreateUser(User user) {
 		// Security
 		if(user.getEmail() == null || !user.getEmail().contains("@")) {
 			return ResponseEntity.badRequest().body("Wrong email format");
 		}
 		
-		return ResponseEntity.ok(userService.saveUser(user));
+		if(userService.emailExists(user.getEmail())) {
+			return ResponseEntity.badRequest().body("E-Mail bereits registriert.");
+		}
+		
+		userService.createUser(user);
+		return ResponseEntity.ok("Registrierung erfolgreich!");
 	}
+	
 	
 }

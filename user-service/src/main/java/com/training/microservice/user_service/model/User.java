@@ -21,6 +21,10 @@ public class User {		 // Tabelle in Datenbank
 	
 	private String password;
 
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public Long getId() {
 		return id;
 	}
