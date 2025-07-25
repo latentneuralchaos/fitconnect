@@ -13,7 +13,7 @@ public class Course {		 // Tabelle in Datenbank
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;	// Primärschlüssel
+	private Long id;		// Primärschlüssel
 	
 	private String title;
 	
