@@ -36,6 +36,10 @@ public class UserService {
 		return userRepository.existsByEmail(email);
 	}
 	
+	public boolean usernameExists(String username) {
+		return userRepository.existsByUsername(username);
+	}
+	
 	/*
 	public void aktualisieren(Long id, Benutzer neuerBenutzer) {
 		

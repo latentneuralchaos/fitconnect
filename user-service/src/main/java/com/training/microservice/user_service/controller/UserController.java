@@ -51,6 +51,11 @@ public class UserController {
 	}
 
 	private ResponseEntity<String> checkAndCreateUser(User user) {
+		
+		if(!user.isTermsAccepted()) {
+			return ResponseEntity.badRequest().body("AGB müssen akzeptiert werden.");
+		}
+		
 		// Security
 		if(user.getEmail() == null || !user.getEmail().contains("@")) {
 			return ResponseEntity.badRequest().body("Wrong email format");
@@ -58,6 +63,10 @@ public class UserController {
 		
 		if(userService.emailExists(user.getEmail())) {
 			return ResponseEntity.badRequest().body("E-Mail bereits registriert.");
+		}
+		
+		if(userService.usernameExists(user.getUsername())) {
+			return ResponseEntity.badRequest().body("Benutzername ist bereits vergeben.");
 		}
 		
 		userService.createUser(user);
