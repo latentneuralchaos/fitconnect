@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ function RegisterForm() {
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/user/register', formData);
+      const res = await axios.post('http://localhost:8081/api/user/register', formData);
       setMessage(res.data);
     } catch (err) {
       setMessage(err.response?.data || "Ein Fehler ist aufgetreten.");
@@ -121,6 +122,10 @@ function RegisterForm() {
 
         <button type="submit" className="btn btn-primary">Registrieren</button>
       </form>
+	  
+	  <p className="mt-3">
+	  	Schon registriert? <Link to="/">Jetzt einloggen</Link>
+	  </p>
     </div>
   );
 }
