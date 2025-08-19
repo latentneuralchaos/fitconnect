@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -19,7 +21,12 @@ public class Course {		 // Tabelle in Datenbank
 	
 	private String description;
 	
-	private String trainer;
+	private String category;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User createdBy;
 
 	public Course() {
 		
@@ -49,12 +56,19 @@ public class Course {		 // Tabelle in Datenbank
 		this.description = description;
 	}
 
-	public String getTrainer() {
-		return trainer;
-	}
-
-	public void setTrainer(String trainer) {
-		this.trainer = trainer;
+	public User getCreatedBy() {
+		return createdBy;
 	}
 	
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
 }

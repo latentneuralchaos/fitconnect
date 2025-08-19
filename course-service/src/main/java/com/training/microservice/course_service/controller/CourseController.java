@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,14 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.microservice.course_service.model.Course;
+import com.training.microservice.course_service.model.User;
+import com.training.microservice.course_service.repository.UserRepository;
 import com.training.microservice.course_service.service.CourseService;
 
 /**
- * HTTP:
- * 	GET:	Lesen
- * 	POST:	Schreiben
- * 	PUT:	Ändern
- * 	DELETE:	Löschen
+ *  CRUD Features
+ * 					HTTP-Methode
+ * 	C: Create 		POST
+ *  R: READ 		GET
+ *  U: Update 		PUT
+ *  D: Delete 		DELETE
+ *  
  */
 @RestController
 @RequestMapping("/api/course")  							
@@ -27,6 +32,9 @@ public class CourseController {
 	
 	@Autowired
 	private CourseService courseService;
+
+	@Autowired
+	private UserRepository userRepository;
 	
 	@GetMapping
 	public List<Course> alle() {				// http://localhost:8082/api/course
@@ -35,13 +43,27 @@ public class CourseController {
 	}
 	
 	@GetMapping("/{courseId}")						// http://localhost:8081/api/course/1
-	public Optional <Course> findById(@PathVariable String courseId) {
+	public Optional <Course> findCourseById(@PathVariable String courseId) {
 		return courseService.findeById(courseId);
 	}
 	
+	
 	@PostMapping
-	public Course create(@RequestBody Course course) {
-		return courseService.save(course);
+	public ResponseEntity<?> createCourse(@RequestBody Course course){
+		
+		if(course.getCreatedBy() == null || course.getCreatedBy().getId() == null) {
+			return ResponseEntity.badRequest().body("Ersteller fehlt.");
+		}
+	
+		Optional<User> userOpt = userRepository.findById(course.getCreatedBy().getId());
+		if(userOpt.isEmpty()) {
+			return ResponseEntity.badRequest().body("Benutzer nicht gefunden.");
+		}
+		
+		course.setCreatedBy(userOpt.get());
+		Course saved = courseService.save(course);
+		return ResponseEntity.ok(saved);
+	
 	}
 	
 }
