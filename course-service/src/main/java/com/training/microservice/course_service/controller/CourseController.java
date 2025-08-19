@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.microservice.course_service.model.Course;
 import com.training.microservice.course_service.model.User;
+import com.training.microservice.course_service.repository.CourseRepository;
 import com.training.microservice.course_service.repository.UserRepository;
 import com.training.microservice.course_service.service.CourseService;
 
@@ -44,7 +46,7 @@ public class CourseController {
 	
 	@GetMapping("/{courseId}")						// http://localhost:8081/api/course/1
 	public Optional <Course> findCourseById(@PathVariable String courseId) {
-		return courseService.findeById(courseId);
+		return courseService.findById(courseId);
 	}
 	
 	
@@ -64,6 +66,19 @@ public class CourseController {
 		Course saved = courseService.save(course);
 		return ResponseEntity.ok(saved);
 	
+	}
+	
+	
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<?> getCourses(@RequestParam Long userId) {
+
+		try {
+			List<Course> courses = courseService.findCoursesByUserId(userId);
+			return ResponseEntity.ok(courses);
+
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 }
